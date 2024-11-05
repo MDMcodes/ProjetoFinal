@@ -94,7 +94,38 @@ def janela_vendas():
     janela = tk.Toplevel(janela_menu)
     janela.title("Vendas")
     janela.geometry("300x300")
-    tk.Label(janela, text="Página de Vendas").pack()
+    
+    # Título da janela
+    tk.Label(janela, text="Gestão de Vendas", font=("Arial", 14)).pack(pady=10)
+
+    # Botão para Cadastrar
+    tk.Button(janela, text="Cadastrar Venda", width=20, command=cadastrar_venda).pack(pady=5)
+    # Botão para Excluir
+    tk.Button(janela, text="Excluir Venda", width=20, command=excluir_venda).pack(pady=5)
+    # Botão para Alterar
+    tk.Button(janela, text="Alterar Venda", width=20, command=alterar_venda).pack(pady=5)
+    # Botão para Pesquisar
+    tk.Button(janela, text="Pesquisar Venda", width=20, command=pesquisar_venda).pack(pady=5)
+
+# Funções para cada ação de vendas
+def cadastrar_venda():
+    # Implementação da função de cadastro de venda
+    pass
+
+def excluir_venda():
+    # Implementação da função para excluir uma venda
+    pass
+
+def alterar_venda():
+    # Implementação da função para alterar dados de uma venda
+    pass
+
+def pesquisar_venda():
+    # Implementação da função para pesquisar uma venda
+    pass
+    
+
+    
 
 def janela_estoque():
     janela = tk.Toplevel(janela_menu)
