@@ -1,16 +1,16 @@
-import mysql.connector
+#import mysql.connector
 import tkinter as tk
 from tkinter import messagebox
 
 # Conexão com o banco de dados
-conexao_banco = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='',
-    database='farmacia'
-)
+# conexao_banco = mysql.connector.connect(
+#     host='localhost',
+#     user='root',
+#     password='',
+#     database='farmacia'
+# )
 
-cursor = conexao_banco.cursor()
+#cursor = conexao_banco.cursor()
 
 # Função para abrir a janela de cadastro de funcionário
 def abrir_cadastro_funcionario():
@@ -20,7 +20,7 @@ def abrir_cadastro_funcionario():
 
     # Configuração do título
     tk.Label(janela_cadastro, text="Cadastrar Funcionário", font=("Arial", 14)).pack(pady=10)
-    
+    4
     # Campo para o ID
     tk.Label(janela_cadastro, text="ID:").pack()
     ID_entry = tk.Entry(janela_cadastro, width=30)
@@ -83,11 +83,11 @@ def janela_funcionarios():
     tk.Label(janela, text="Gestão de Funcionários", font=("Arial", 14)).pack(pady=10)
 
     # Botão para Cadastrar
-    tk.Button(janela, text="Cadastrar", width=20, command=abrir_cadastro_funcionario).pack(pady=5)
+    tk.Button(janela, text="Cadastrar Funcionario", width=20, command=abrir_cadastro_funcionario).pack(pady=5)
     # Botões para Excluir, Alterar e Pesquisar podem ser adicionados com suas funções
-    tk.Button(janela, text="Excluir", width=20, command=excluir_funcionario).pack(pady=5)
-    tk.Button(janela, text="Alterar", width=20, command=alterar_funcionario).pack(pady=5)
-    tk.Button(janela, text="Pesquisar", width=20, command=pesquisar_funcionario).pack(pady=5)
+    tk.Button(janela, text="Excluir Funcionario", width=20, command=excluir_funcionario).pack(pady=5)
+    tk.Button(janela, text="Alterar Funcionario", width=20, command=alterar_funcionario).pack(pady=5)
+    tk.Button(janela, text="Pesquisar Funcionario", width=20, command=pesquisar_funcionario).pack(pady=5)
 
 # Funções para as outras janelas (Vendas, Estoque, Financeiro)
 def janela_vendas():
@@ -109,29 +109,289 @@ def janela_vendas():
 
 # Funções para cada ação de vendas
 def cadastrar_venda():
-    # Implementação da função de cadastro de venda
-    pass
+    janela_cadastro = tk.Toplevel()
+    janela_cadastro.title("Cadastrar Venda")
+    janela_cadastro.geometry("400x400")
+
+    # Configuração do título
+    tk.Label(janela_cadastro, text="Cadastrar Venda", font=("Arial", 14)).pack(pady=10)
+    
+    # Campo para ID da Venda
+    tk.Label(janela_cadastro, text="ID da Venda:").pack()
+    ID_vendas_entry = tk.Entry(janela_cadastro, width=30)
+    ID_vendas_entry.pack(pady=5)
+
+    # Campo para Código do Produto
+    tk.Label(janela_cadastro, text="Código do Produto:").pack()
+    codproduto_entry = tk.Entry(janela_cadastro, width=30)
+    codproduto_entry.pack(pady=5)
+
+    # Campo para Código do Funcionário
+    tk.Label(janela_cadastro, text="Código do Funcionário:").pack()
+    codfuncionario_entry = tk.Entry(janela_cadastro, width=30)
+    codfuncionario_entry.pack(pady=5)
+
+    # Campo para Quantidade do Produto
+    tk.Label(janela_cadastro, text="Quantidade do Produto:").pack()
+    quantidade_produto_entry = tk.Entry(janela_cadastro, width=30)
+    quantidade_produto_entry.pack(pady=5)
+
+    # Campo para Valor Unitário
+    tk.Label(janela_cadastro, text="Valor Unitário:").pack()
+    valor_unitario_entry = tk.Entry(janela_cadastro, width=30)
+    valor_unitario_entry.pack(pady=5)
+
+    # Campo para Data da Venda
+    tk.Label(janela_cadastro, text="Data da Venda (YYYY-MM-DD):").pack()
+    data_venda_entry = tk.Entry(janela_cadastro, width=30)
+    data_venda_entry.pack(pady=5)
+
+    # Função para salvar a venda no banco de dados
+    def salvar_venda():
+        id_venda = ID_vendas_entry.get()
+        codproduto = codproduto_entry.get()
+        codfuncionario = codfuncionario_entry.get()
+        quantidade_produto = quantidade_produto_entry.get()
+        valor_unitario = valor_unitario_entry.get()
+        data_venda = data_venda_entry.get()
+
+        # Verifica se o ID da venda já existe
+        cursor.execute(f'SELECT * FROM vendas WHERE ID_vendas = "{id_venda}"')
+        resultado = cursor.fetchone()
+        quantidade_produto = int(quantidade_produto)
+        valor_unitario = float(valor_unitario)
+        valor_total = valor_unitario * quantidade_produto
+        if resultado:
+            messagebox.showwarning("Aviso", "Este ID da venda já está cadastrado!")
+        else:
+            # Inserindo os dados no banco de dados
+            comando_sql = f'''INSERT INTO vendas 
+                             (ID_vendas, codproduto, codfuncionario, Quantidade_produto, Valor_unitário, Valor_total, Data_da_venda) 
+                             VALUES ("{id_venda}", "{codproduto}", "{codfuncionario}", "{quantidade_produto}", "{valor_unitario}", "{valor_total}", "{data_venda}")'''
+            cursor.execute(comando_sql)
+            conexao_banco.commit()
+            messagebox.showinfo("Sucesso", "Venda cadastrada com sucesso!")
+            janela_cadastro.destroy()  # Fecha a janela de cadastro após salvar
+
+    tk.Button(janela_cadastro, text="Salvar", command=salvar_venda).pack(pady=20)
+
 
 def excluir_venda():
-    # Implementação da função para excluir uma venda
-    pass
+    janela_excluir_vendas = tk.Toplevel(janela_menu)
+    janela_excluir_vendas.title("Excluir Venda")
+    janela_excluir_vendas.geometry("400x400")
+
+    # Configuração do título
+    tk.Label(janela_excluir_vendas, text="Excluir Venda", font=("Arial", 14)).pack(pady=10)
+
+    # Campo para o ID da venda
+    tk.Label(janela_excluir_vendas, text="ID da Venda:").pack()
+    ID_venda_entry = tk.Entry(janela_excluir_vendas, width=30)
+    ID_venda_entry.pack(pady=5)
+
+    # Função para apagar a venda no banco de dados
+    def apagar_venda():
+        id_venda = ID_venda_entry.get()
+
+        # Verifica se o ID da venda já existe
+        cursor.execute(f'SELECT * FROM vendas WHERE ID_vendaS = "{id_venda}"')
+        resultado = cursor.fetchone()
+
+        if resultado:
+            # Comando SQL para deletar a venda
+            comando_sql = f'''DELETE FROM vendas WHERE ID_vendaS = {id_venda}'''
+            cursor.execute(comando_sql)
+            conexao_banco.commit()
+            messagebox.showinfo("Sucesso", "Venda excluída com sucesso!")
+            janela_excluir_vendas.destroy()  # Fecha a janela de excluir após salvar
+            
+        else:
+            messagebox.showwarning("Aviso", "Este ID não existe!")
+
+    # Botão para excluir a venda
+    tk.Button(janela_excluir_vendas, text="Excluir", command=apagar_venda).pack(pady=20)
 
 def alterar_venda():
-    # Implementação da função para alterar dados de uma venda
-    pass
+    janela_alterar_venda = tk.Toplevel(janela_menu)
+    janela_alterar_venda.title("Alterar Venda")
+    janela_alterar_venda.geometry("400x600")
 
+    # Título da janela
+    tk.Label(janela_alterar_venda, text="Alterar Venda", font=("Arial", 14)).pack(pady=10)
+
+    # Opção para buscar por ID
+    tk.Label(janela_alterar_venda, text="Pesquisar por ID da Venda:").pack(pady=5)
+    busca_entry_venda = tk.Entry(janela_alterar_venda, width=30)
+    busca_entry_venda.pack(pady=5)
+
+    # Opção de campo a alterar
+    tk.Label(janela_alterar_venda, text="Escolha o campo a alterar:").pack(pady=10)
+    campo_var_venda = tk.StringVar(value="Quantidade_produto")
+    tk.Radiobutton(janela_alterar_venda, text="Quantidade", variable=campo_var_venda, value="Quantidade_produto").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Valor Unitário", variable=campo_var_venda, value="Valor_unitário").pack()
+    tk.Radiobutton(janela_alterar_venda, text="ID Venda", variable=campo_var_venda, value="ID_vendas").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Código Produto", variable=campo_var_venda, value="codproduto").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Código Funcionário", variable=campo_var_venda, value="codfuncionario").pack()
+
+    # Entrada para o novo valor
+    tk.Label(janela_alterar_venda, text="Novo valor:").pack(pady=5)
+    novo_valor_entry = tk.Entry(janela_alterar_venda, width=30)
+    novo_valor_entry.pack(pady=5)
+
+    # Função para buscar e alterar a venda
+    def buscar_e_alterar_venda():
+        busca_valor_venda = busca_entry_venda.get()
+        campo_venda = campo_var_venda.get()
+        novo_valor_venda = novo_valor_entry.get()
+
+        # Busca pela venda
+        cursor.execute(f'SELECT * FROM vendas WHERE ID_vendas = "{busca_valor_venda}"')
+        venda = cursor.fetchone()
+
+        # Verificação se a venda existe
+        if venda:
+            # Atualiza o campo correspondente
+            if campo_venda == "Quantidade_produto":
+                nova_quantidade = float(novo_valor_venda)  # Converte para float
+                valor_unitario = float(venda[4])  # Converte o valor unitário para float
+                novo_valor_total = nova_quantidade * valor_unitario
+                
+                # Atualiza no banco de dados
+                comando_sql_venda = f'UPDATE vendas SET Quantidade_produto = "{nova_quantidade}", Valor_total = "{novo_valor_total}" WHERE ID_vendas = "{venda[0]}"'
+            
+            elif campo_venda == "Valor_unitário":
+                novo_valor_unitario = float(novo_valor_venda)  # Converte para float
+                quantidade = float(venda[3])  # Converte a quantidade para float
+                novo_valor_total = quantidade * novo_valor_unitario
+                
+                # Atualiza no banco de dados
+                comando_sql_venda = f'UPDATE vendas SET Valor_unitário = "{novo_valor_unitario}", Valor_total = "{novo_valor_total}" WHERE ID_vendas = "{venda[0]}"'
+
+            elif campo_venda == "ID_vendas":
+                novo_id_venda = novo_valor_venda
+                
+                # Atualiza no banco de dados
+                comando_sql_venda = f'UPDATE vendas SET ID_vendas = "{novo_id_venda}" WHERE ID_vendas = "{venda[0]}"'
+            
+            elif campo_venda == "codproduto":
+                novo_cod_produto = novo_valor_venda
+                
+                # Atualiza no banco de dados
+                comando_sql_venda = f'UPDATE vendas SET codproduto = "{novo_cod_produto}" WHERE ID_vendas = "{venda[0]}"'
+            
+            elif campo_venda == "codfuncionario":
+                novo_cod_funcionario = novo_valor_venda
+                
+                # Atualiza no banco de dados
+                comando_sql_venda = f'UPDATE vendas SET codfuncionario = "{novo_cod_funcionario}" WHERE ID_vendas = "{venda[0]}"'
+            
+            # Executa o comando de atualização
+            cursor.execute(comando_sql_venda)
+            conexao_banco.commit()
+            messagebox.showinfo("Sucesso", f"{campo_venda} atualizado com sucesso!")
+            janela_alterar_venda.destroy()
+        else:
+            messagebox.showwarning("Aviso", "Venda não encontrada!")
+
+    # Botão para realizar a alteração
+    tk.Button(janela_alterar_venda, text="Alterar", command=buscar_e_alterar_venda).pack(pady=20)
+    
 def pesquisar_venda():
-    # Implementação da função para pesquisar uma venda
-    pass
+    janela_pesquisa = tk.Toplevel(janela_menu)
+    janela_pesquisa.title("Pesquisar Vendas")
+    janela_pesquisa.geometry("800x700")
+
+    tk.Label(janela_pesquisa, text="Pesquisar Vendas", font=("Arial", 14)).pack(pady=10)
+
+    # Opção de pesquisa
+    tk.Label(janela_pesquisa, text="Pesquisar por:").pack(pady=5)
+    criterio_var = tk.StringVar(value="ID")
+    tk.Radiobutton(janela_pesquisa, text="ID Venda", variable=criterio_var, value="ID").pack()
+    tk.Radiobutton(janela_pesquisa, text="ID Funcionário", variable=criterio_var, value="ID Funcionário").pack()
+    tk.Radiobutton(janela_pesquisa, text="Data", variable=criterio_var, value="Data").pack()
+    tk.Radiobutton(janela_pesquisa, text="Valor Total", variable=criterio_var, value="Valor Total").pack()
+    tk.Radiobutton(janela_pesquisa, text="Quantidade", variable=criterio_var, value="Quantidade").pack()
+
+    # Entrada para o valor de pesquisa
+    tk.Label(janela_pesquisa, text="Digite o valor de pesquisa:").pack(pady=5)
+    valor_entry = tk.Entry(janela_pesquisa, width=30)
+    valor_entry.pack(pady=5)
+
+    # Listbox para mostrar os resultados
+    lista_resultados = tk.Listbox(janela_pesquisa, width=110, height=15)
+    lista_resultados.pack(pady=10)
+
+    # Função para buscar e exibir resultados
+    def buscar():
+        criterio = criterio_var.get()
+        valor = valor_entry.get()
+        lista_resultados.delete(0, tk.END)  # Limpa resultados anteriores
+
+        if criterio == "ID":
+            comando_sql = f'SELECT * FROM vendas WHERE ID_vendas = "{valor}"'
+        elif criterio == "ID Funcionário":
+            comando_sql = f'SELECT * FROM vendas WHERE codfuncionario = "{valor}"'
+        elif criterio == "Data":
+            comando_sql = f'SELECT * FROM vendas WHERE Data_da_venda LIKE "%{valor}%"'
+        elif criterio == "Valor Total":
+            try:
+                valor_min, valor_max = map(float, valor.split("-"))
+                comando_sql = f'SELECT * FROM vendas WHERE Valor_total BETWEEN {valor_min} AND {valor_max}'
+            except ValueError:
+                messagebox.showwarning("Formato Incorreto", "Por favor, insira uma faixa de valor no formato: min-max")
+                return
+        elif criterio == "Quantidade":
+            try:
+                quantidade_min, quantidade_max = map(int, valor.split("-"))
+                comando_sql = f'SELECT * FROM vendas WHERE Quantidade_produto BETWEEN {quantidade_min} AND {quantidade_max}'
+            except ValueError:
+                messagebox.showwarning("Formato Incorreto", "Por favor, insira uma faixa de quantidade no formato: min-max")
+                return
+
+        # Executa a pesquisa no banco de dados
+        cursor.execute(comando_sql)
+        resultados = cursor.fetchall()
+
+        # Exibe os resultados na lista
+        if resultados:
+            for venda in resultados:
+                lista_resultados.insert(tk.END, f"ID Venda: {venda[0]}, Cod Produto: {venda[1]}, ID Funcionário: {venda[2]}, Data: {venda[6]}, Valor Total: {venda[5]}, Valor Unitario: {venda[4]}, Quantidade: {venda[3]}, ")
+        else:
+            lista_resultados.insert(tk.END, "Nenhum resultado encontrado.")
+
+    # Botão para realizar a busca
+    tk.Button(janela_pesquisa, text="Buscar", command=buscar).pack(pady=10)
     
 
     
+
+def abrir_cadastro_estoque():
+    # Função para abrir a janela de cadastro de estoque
+    pass
+
+def excluir_estoque():
+    # Função para excluir estoque
+    pass
+
+def alterar_estoque():
+    # Função para alterar estoque
+    pass
+
+def pesquisar_estoque():
+    # Função para pesquisar estoque
+    pass
 
 def janela_estoque():
     janela = tk.Toplevel(janela_menu)
     janela.title("Estoque")
     janela.geometry("300x300")
-    tk.Label(janela, text="Página de Estoque").pack()
+    
+    tk.Label(janela, text="Gestão de Estoque", font=("Arial", 14)).pack(pady=10)
+
+    tk.Button(janela, text="Cadastrar Estoque", width=20, command=abrir_cadastro_estoque).pack(pady=5)
+    tk.Button(janela, text="Excluir Estoque", width=20, command=excluir_estoque).pack(pady=5)
+    tk.Button(janela, text="Alterar Estoque", width=20, command=alterar_estoque).pack(pady=5)
+    tk.Button(janela, text="Pesquisar Estoque", width=20, command=pesquisar_estoque).pack(pady=5)
 
 def janela_financeiro():
     janela = tk.Toplevel(janela_menu)
