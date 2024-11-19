@@ -1,8 +1,7 @@
-#import mysql.connector
+import mysql.connector
 import tkinter as tk
 from tkinter import messagebox
 
-<<<<<<< HEAD
 #Conexão com o banco de dados
 conexao_banco = mysql.connector.connect(
     host='localhost',
@@ -10,17 +9,8 @@ conexao_banco = mysql.connector.connect(
     password='',
     database='farmacia'
 )
-=======
-# Conexão com o banco de dados
-# conexao_banco = mysql.connector.connect(
-#     host='localhost',
-#     user='root',
-#     password='',
-#     database='farmacia'
-# )
->>>>>>> a880c56969551e62a207550e6fcea781cb925c3f
 
-#cursor = conexao_banco.cursor()
+cursor = conexao_banco.cursor()
 
 # Função para abrir a janela de cadastro de funcionário
 def abrir_cadastro_funcionario():
