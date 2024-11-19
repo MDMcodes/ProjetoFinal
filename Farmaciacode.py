@@ -568,7 +568,79 @@ def janela_financeiro():
     janela = tk.Toplevel(janela_menu)
     janela.title("Financeiro")
     janela.geometry("300x300")
-    tk.Label(janela, text="Página de Financeiro").pack()
+
+    tk.Label(janela, text="Gestão Financeira", font=("Arial", 14)).pack(pady=10)
+
+    # Botão para calcular a receita bruta
+    tk.Button(janela, text="Calcular Receita Bruta", width=25, command=calcular_receita).pack(pady=5)
+
+    # Botão para calcular o valor líquido
+    tk.Button(janela, text="Calcular Valor Líquido", width=25, command=calcular_valor_liquido).pack(pady=5)
+
+
+def calcular_valor_liquido():
+    # Abre uma nova janela para o cálculo do valor líquido
+    janela_liquido = tk.Toplevel(janela_menu)
+    janela_liquido.title("Calcular Valor Líquido")
+    janela_liquido.geometry("400x300")
+
+    tk.Label(janela_liquido, text="Calcular Valor Líquido", font=("Arial", 14)).pack(pady=10)
+
+    # Campo para data inicial
+    tk.Label(janela_liquido, text="Data Inicial (YYYY-MM-DD):").pack()
+    data_inicial_entry = tk.Entry(janela_liquido, width=30)
+    data_inicial_entry.pack(pady=5)
+
+    # Campo para data final
+    tk.Label(janela_liquido, text="Data Final (YYYY-MM-DD):").pack()
+    data_final_entry = tk.Entry(janela_liquido, width=30)
+    data_final_entry.pack(pady=5)
+
+    def calcular():
+        data_inicial = data_inicial_entry.get()
+        data_final = data_final_entry.get()
+
+        # Validação básica das datas
+        if not data_inicial or not data_final:
+            messagebox.showwarning("Aviso", "Por favor, preencha ambas as datas!")
+            return
+
+        try:
+            # Calculando o valor bruto
+            cursor.execute(f'''
+                SELECT SUM(Valor_total) 
+                FROM vendas 
+                WHERE Data_da_venda BETWEEN "{data_inicial}" AND "{data_final}"
+            ''')
+            resultado_bruto = cursor.fetchone()
+            valor_bruto = resultado_bruto[0] if resultado_bruto[0] is not None else 0.0
+
+            # Calculando o custo dos produtos
+            cursor.execute('SELECT SUM(Valor_produto * Quantidade_estoque) FROM estoque')
+            resultado_produtos = cursor.fetchone()
+            custo_produtos = resultado_produtos[0] if resultado_produtos[0] is not None else 0.0
+
+            # Calculando o custo com funcionários
+            cursor.execute('SELECT SUM(Salário_funcionário) FROM funcionários')
+            resultado_salarios = cursor.fetchone()
+            custo_funcionarios = resultado_salarios[0] if resultado_salarios[0] is not None else 0.0
+
+            # Calculando o valor líquido
+            valor_liquido = valor_bruto - (custo_produtos + custo_funcionarios)
+
+            messagebox.showinfo("Valor Líquido", f"""
+                Valor Bruto: R$ {valor_bruto:.2f}
+                Custo dos Produtos: R$ {custo_produtos:.2f}
+                Custo com Funcionários: R$ {custo_funcionarios:.2f}
+                -------------------------------
+                Valor Líquido: R$ {valor_liquido:.2f}
+            """)
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro ao calcular o valor líquido: {e}")
+
+    # Botão para calcular o valor líquido
+    tk.Button(janela_liquido, text="Calcular", command=calcular).pack(pady=20)
+
 
 # Funções para as outras operações de Funcionários (placeholders)
 def excluir_funcionario():
@@ -746,6 +818,53 @@ def fechar_programa():
     if confirmacao:
         conexao_banco.close()  # Fecha a conexão com o banco de dados
         janela_menu.destroy()  # Encerra a janela principal
+
+def calcular_receita():
+    # Abre uma nova janela para o cálculo de receita
+    janela_receita = tk.Toplevel(janela_menu)
+    janela_receita.title("Calcular Receita Bruta")
+    janela_receita.geometry("400x300")
+
+    tk.Label(janela_receita, text="Calcular Receita Bruta", font=("Arial", 14)).pack(pady=10)
+
+    # Campo para data inicial
+    tk.Label(janela_receita, text="Data Inicial (YYYY-MM-DD):").pack()
+    data_inicial_entry = tk.Entry(janela_receita, width=30)
+    data_inicial_entry.pack(pady=5)
+
+    # Campo para data final
+    tk.Label(janela_receita, text="Data Final (YYYY-MM-DD):").pack()
+    data_final_entry = tk.Entry(janela_receita, width=30)
+    data_final_entry.pack(pady=5)
+
+    def calcular():
+        data_inicial = data_inicial_entry.get()
+        data_final = data_final_entry.get()
+
+        # Validação básica das datas
+        if not data_inicial or not data_final:
+            messagebox.showwarning("Aviso", "Por favor, preencha ambas as datas!")
+            return
+
+        try:
+            # Soma dos valores totais das vendas no período especificado
+            comando_sql = f'''
+                SELECT SUM(Valor_total) 
+                FROM vendas 
+                WHERE Data_da_venda BETWEEN "{data_inicial}" AND "{data_final}"
+            '''
+            cursor.execute(comando_sql)
+            resultado = cursor.fetchone()
+            receita_bruta = resultado[0] if resultado[0] is not None else 0.0
+
+            messagebox.showinfo("Receita Bruta", f"A receita bruta de {data_inicial} a {data_final} é: R$ {receita_bruta:.2f}")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro ao calcular a receita: {e}")
+
+    # Botão para calcular a receita
+    tk.Button(janela_receita, text="Calcular", command=calcular).pack(pady=20)
+
+
 
 # Configuração da janela principal
 janela_menu = tk.Tk()
