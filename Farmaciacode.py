@@ -413,23 +413,145 @@ def pesquisar_venda():
     
 
     
-
 def abrir_cadastro_estoque():
-    # Função para abrir a janela de cadastro de estoque
-    pass
+    janela_cadastro = tk.Toplevel(janela_menu)
+    janela_cadastro.title("Cadastrar Produto no Estoque")
+    janela_cadastro.geometry("400x500")
 
+    tk.Label(janela_cadastro, text="Cadastrar Produto", font=("Arial", 14)).pack(pady=10)
+    
+    # Campos de entrada
+    campos = ["ID do Produto", "Nome do Produto", "Categoria", "Tarja do Remédio", "Fabricante/Marca", "Valor do Produto", "Quantidade em Estoque"]
+    entradas = {}
+    for campo in campos:
+        tk.Label(janela_cadastro, text=f"{campo}:").pack()
+        entrada = tk.Entry(janela_cadastro, width=30)
+        entrada.pack(pady=5)
+        entradas[campo] = entrada
+
+    def salvar_produto():
+        try:
+            # Obtendo os valores dos campos
+            valores = {campo: entradas[campo].get() for campo in campos}
+
+            # Conversão de tipos para os valores numéricos
+            valor_produto = float(valores["Valor do Produto"])
+            quantidade_estoque = int(valores["Quantidade em Estoque"])
+
+            # Verifica se o ID já existe
+            cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{valores["ID do Produto"]}"')
+            if cursor.fetchone():
+                messagebox.showwarning("Aviso", "Este ID já está cadastrado!")
+            else:
+                # Inserindo os dados no banco de dados
+                comando_sql = f'''
+                    INSERT INTO estoque (ID_produto, Nome_produto, Categoria, Tarja_remedio, Fabricante_Marca, Valor_produto, Quantidade_estoque)
+                    VALUES ("{valores["ID do Produto"]}", "{valores["Nome do Produto"]}", "{valores["Categoria"]}", "{valores["Tarja do Remédio"]}",
+                            "{valores["Fabricante/Marca"]}", {valor_produto}, {quantidade_estoque})
+                '''
+                cursor.execute(comando_sql)
+                conexao_banco.commit()
+                messagebox.showinfo("Sucesso", "Produto cadastrado com sucesso!")
+                janela_cadastro.destroy()
+        except ValueError:
+            messagebox.showerror("Erro", "Verifique se os valores estão corretos:\n- Valor do Produto deve ser um número.\n- Quantidade deve ser um número inteiro.")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
+
+    tk.Button(janela_cadastro, text="Salvar", command=salvar_produto).pack(pady=20)
+
+# Função para excluir produto do estoque
 def excluir_estoque():
-    # Função para excluir estoque
-    pass
+    janela_excluir = tk.Toplevel(janela_menu)
+    janela_excluir.title("Excluir Produto do Estoque")
+    janela_excluir.geometry("400x200")
 
+    tk.Label(janela_excluir, text="Excluir Produto", font=("Arial", 14)).pack(pady=10)
+    tk.Label(janela_excluir, text="ID do Produto:").pack()
+    id_produto_entry = tk.Entry(janela_excluir, width=30)
+    id_produto_entry.pack(pady=5)
+
+    def apagar_produto():
+        id_produto = id_produto_entry.get()
+        cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{id_produto}"')
+        if cursor.fetchone():
+            cursor.execute(f'DELETE FROM estoque WHERE ID_produto = "{id_produto}"')
+            conexao_banco.commit()
+            messagebox.showinfo("Sucesso", "Produto excluído com sucesso!")
+            janela_excluir.destroy()
+        else:
+            messagebox.showwarning("Aviso", "Produto não encontrado!")
+
+    tk.Button(janela_excluir, text="Excluir", command=apagar_produto).pack(pady=20)
+
+# Função para alterar produto no estoque
 def alterar_estoque():
-    # Função para alterar estoque
-    pass
+    janela_alterar = tk.Toplevel(janela_menu)
+    janela_alterar.title("Alterar Produto no Estoque")
+    janela_alterar.geometry("400x400")
 
+    tk.Label(janela_alterar, text="Alterar Produto", font=("Arial", 14)).pack(pady=10)
+    tk.Label(janela_alterar, text="ID do Produto:").pack()
+    id_produto_entry = tk.Entry(janela_alterar, width=30)
+    id_produto_entry.pack(pady=5)
+
+    tk.Label(janela_alterar, text="Campo a alterar:").pack()
+    campo_var = tk.StringVar(value="Nome_produto")
+    opcoes = ["Nome_produto", "Categoria", "Tarja_remedio", "Fabricante/Marca", "Valor_produto", "Quantidade_estoque"]
+    for opcao in opcoes:
+        tk.Radiobutton(janela_alterar, text=opcao, variable=campo_var, value=opcao).pack()
+
+    tk.Label(janela_alterar, text="Novo valor:").pack()
+    novo_valor_entry = tk.Entry(janela_alterar, width=30)
+    novo_valor_entry.pack(pady=5)
+
+    def atualizar_produto():
+        id_produto = id_produto_entry.get()
+        campo = campo_var.get()
+        novo_valor = novo_valor_entry.get()
+
+        cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{id_produto}"')
+        if cursor.fetchone():
+            cursor.execute(f'UPDATE estoque SET {campo} = "{novo_valor}" WHERE ID_produto = "{id_produto}"')
+            conexao_banco.commit()
+            messagebox.showinfo("Sucesso", f"{campo} atualizado com sucesso!")
+            janela_alterar.destroy()
+        else:
+            messagebox.showwarning("Aviso", "Produto não encontrado!")
+
+    tk.Button(janela_alterar, text="Alterar", command=atualizar_produto).pack(pady=20)
+
+# Função para pesquisar produto no estoque
 def pesquisar_estoque():
-    # Função para pesquisar estoque
-    pass
+    janela_pesquisa = tk.Toplevel(janela_menu)
+    janela_pesquisa.title("Pesquisar Produto no Estoque")
+    janela_pesquisa.geometry("800x500")
 
+    tk.Label(janela_pesquisa, text="Pesquisar Produto", font=("Arial", 14)).pack(pady=10)
+    tk.Label(janela_pesquisa, text="Buscar por (ID ou Nome):").pack()
+    busca_entry = tk.Entry(janela_pesquisa, width=30)
+    busca_entry.pack(pady=5)
+
+    lista_resultados = tk.Listbox(janela_pesquisa, width=100, height=15)
+    lista_resultados.pack(pady=10)
+
+    def buscar_produto():
+        busca = busca_entry.get()
+        cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{busca}" OR Nome_produto LIKE "%{busca}%"')
+        resultados = cursor.fetchall()
+        lista_resultados.delete(0, tk.END)
+
+        if resultados:
+            for produto in resultados:
+                lista_resultados.insert(tk.END, f"ID: {produto[0]}, Nome: {produto[1]}, Categoria: {produto[2]}, "
+                                                f"Tarja: {produto[3]}, Marca: {produto[4]}, Valor: {produto[5]}, "
+                                                f"Quantidade: {produto[6]}")
+        else:
+            lista_resultados.insert(tk.END, "Nenhum resultado encontrado.")
+
+    tk.Button(janela_pesquisa, text="Buscar", command=buscar_produto).pack(pady=10)
+
+# Função para a janela de Estoque
 def janela_estoque():
     janela = tk.Toplevel(janela_menu)
     janela.title("Estoque")
@@ -614,8 +736,16 @@ def pesquisar_funcionario():
         else:
             lista_resultados.insert(tk.END, "Nenhum resultado encontrado.")
 
+
     # Botão para realizar a busca
     tk.Button(janela_pesquisa, text="Buscar", command=buscar).pack(pady=10)
+
+
+def fechar_programa():
+    confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente fechar o programa?")
+    if confirmacao:
+        conexao_banco.close()  # Fecha a conexão com o banco de dados
+        janela_menu.destroy()  # Encerra a janela principal
 
 # Configuração da janela principal
 janela_menu = tk.Tk()
@@ -635,6 +765,8 @@ tk.Button(frame_central, text='Funcionários', font=("Arial", 18), width=20, hei
 tk.Button(frame_central, text='Vendas', font=("Arial", 18), width=20, height=2, command=janela_vendas).pack(pady=10)
 tk.Button(frame_central, text='Estoque', font=("Arial", 18), width=20, height=2, command=janela_estoque).pack(pady=10)
 tk.Button(frame_central, text='Financeiro', font=("Arial", 18), width=20, height=2, command=janela_financeiro).pack(pady=10)
+tk.Button(frame_central, text='Sair', font=("Arial", 18), width=20, height=2, command=fechar_programa).pack(pady=10)
+
 
 # Loop da janela principal
 janela_menu.mainloop()
