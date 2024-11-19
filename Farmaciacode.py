@@ -157,17 +157,31 @@ def cadastrar_venda():
 
         # Verifica se o ID da venda já existe
         cursor.execute(f'SELECT * FROM vendas WHERE ID_vendas = "{id_venda}"')
-        resultado = cursor.fetchone()
+        resultado_venda = cursor.fetchone()
+
+        # Verifica se o código do produto existe
+        cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{codproduto}"')
+        resultado_produto = cursor.fetchone()
+
+        # Verifica se o código do funcionário existe
+        cursor.execute(f'SELECT * FROM funcionários WHERE ID_funcionário = "{codfuncionario}"')
+        resultado_funcionario = cursor.fetchone()
+
         quantidade_produto = int(quantidade_produto)
         valor_unitario = float(valor_unitario)
         valor_total = valor_unitario * quantidade_produto
-        if resultado:
+
+        if resultado_venda:
             messagebox.showwarning("Aviso", "Este ID da venda já está cadastrado!")
+        elif not resultado_produto:
+            messagebox.showwarning("Aviso", "Código do produto não encontrado!")
+        elif not resultado_funcionario:
+            messagebox.showwarning("Aviso", "Código do funcionário não encontrado!")
         else:
             # Inserindo os dados no banco de dados
             comando_sql = f'''INSERT INTO vendas 
-                             (ID_vendas, codproduto, codfuncionario, Quantidade_produto, Valor_unitário, Valor_total, Data_da_venda) 
-                             VALUES ("{id_venda}", "{codproduto}", "{codfuncionario}", "{quantidade_produto}", "{valor_unitario}", "{valor_total}", "{data_venda}")'''
+                            (ID_vendas, codproduto, codfuncionario, Quantidade_produto, Valor_unitário, Valor_total, Data_da_venda) 
+                            VALUES ("{id_venda}", "{codproduto}", "{codfuncionario}", "{quantidade_produto}", "{valor_unitario}", "{valor_total}", "{data_venda}")'''
             cursor.execute(comando_sql)
             conexao_banco.commit()
             messagebox.showinfo("Sucesso", "Venda cadastrada com sucesso!")
