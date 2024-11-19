@@ -13,7 +13,7 @@ conexao_banco = mysql.connector.connect(
 cursor = conexao_banco.cursor()
 
 # Função para abrir a janela de cadastro de funcionário
-def abrir_janela_cadastro_funcionario():
+def abrir_cadastro_funcionario():
     janela_cadastro = tk.Toplevel(janela_menu)
     janela_cadastro.title("Cadastrar Funcionário")
     janela_cadastro.geometry("400x400")
@@ -21,22 +21,27 @@ def abrir_janela_cadastro_funcionario():
     # Configuração do título
     tk.Label(janela_cadastro, text="Cadastrar Funcionário", font=("Arial", 14)).pack(pady=10)
     4
+    # Campo para o ID
     tk.Label(janela_cadastro, text="ID:").pack()
     ID_entry = tk.Entry(janela_cadastro, width=30)
     ID_entry.pack(pady=5)
 
+    # Campo para Nome
     tk.Label(janela_cadastro, text="Nome:").pack()
     nome_entry = tk.Entry(janela_cadastro, width=30)
     nome_entry.pack(pady=5)
 
+    # Campo para Cargo
     tk.Label(janela_cadastro, text="Cargo:").pack()
     cargo_entry = tk.Entry(janela_cadastro, width=30)
     cargo_entry.pack(pady=5)
 
+    # Campo para Vendas Totais
     tk.Label(janela_cadastro, text="Vendas Totais:").pack()
     vendas_totais_entry = tk.Entry(janela_cadastro, width=30)
     vendas_totais_entry.pack(pady=5)
 
+    # Campo para Salário
     tk.Label(janela_cadastro, text="Salário:").pack()
     salario_entry = tk.Entry(janela_cadastro, width=30)
     salario_entry.pack(pady=5)
@@ -70,21 +75,22 @@ def abrir_janela_cadastro_funcionario():
 
     
 # Função para a janela de Funcionários com botões adicionais
-def abrir_janela_funcionarios():
+def janela_funcionarios():
     janela = tk.Toplevel(janela_menu)
     janela.title("Funcionários")
     janela.geometry("300x300")
     
     tk.Label(janela, text="Gestão de Funcionários", font=("Arial", 14)).pack(pady=10)
 
-    tk.Button(janela, text="Cadastrar Funcionario", width=20, command=abrir_janela_cadastro_funcionario).pack(pady=5)
+    # Botão para Cadastrar
+    tk.Button(janela, text="Cadastrar Funcionario", width=20, command=abrir_cadastro_funcionario).pack(pady=5)
     # Botões para Excluir, Alterar e Pesquisar podem ser adicionados com suas funções
-    tk.Button(janela, text="Excluir Funcionario", width=20, command=abrir_janela_excluir_funcionario).pack(pady=5)
-    tk.Button(janela, text="Alterar Funcionario", width=20, command=abrir_janela_alterar_funcionario).pack(pady=5)
-    tk.Button(janela, text="Pesquisar Funcionario", width=20, command=abrir_janela_pesquisar_funcionario).pack(pady=5)
+    tk.Button(janela, text="Excluir Funcionario", width=20, command=excluir_funcionario).pack(pady=5)
+    tk.Button(janela, text="Alterar Funcionario", width=20, command=alterar_funcionario).pack(pady=5)
+    tk.Button(janela, text="Pesquisar Funcionario", width=20, command=pesquisar_funcionario).pack(pady=5)
 
 # Funções para as outras janelas (Vendas, Estoque, Financeiro)
-def abrir_janela_vendas():
+def janela_vendas():
     janela = tk.Toplevel(janela_menu)
     janela.title("Vendas")
     janela.geometry("300x300")
@@ -92,13 +98,17 @@ def abrir_janela_vendas():
     # Título da janela
     tk.Label(janela, text="Gestão de Vendas", font=("Arial", 14)).pack(pady=10)
 
-    tk.Button(janela, text="Cadastrar Venda", width=20, command=abrir_janela_cadastro_venda).pack(pady=5)
-    tk.Button(janela, text="Excluir Venda", width=20, command=abrir_janela_excluir_venda).pack(pady=5)
-    tk.Button(janela, text="Alterar Venda", width=20, command=abrir_janela_alterar_venda).pack(pady=5)
-    tk.Button(janela, text="Pesquisar Venda", width=20, command=abrir_janela_pesquisar_venda).pack(pady=5)
+    # Botão para Cadastrar
+    tk.Button(janela, text="Cadastrar Venda", width=20, command=cadastrar_venda).pack(pady=5)
+    # Botão para Excluir
+    tk.Button(janela, text="Excluir Venda", width=20, command=excluir_venda).pack(pady=5)
+    # Botão para Alterar
+    tk.Button(janela, text="Alterar Venda", width=20, command=alterar_venda).pack(pady=5)
+    # Botão para Pesquisar
+    tk.Button(janela, text="Pesquisar Venda", width=20, command=pesquisar_venda).pack(pady=5)
 
 # Funções para cada ação de vendas
-def abrir_janela_cadastro_venda():
+def cadastrar_venda():
     janela_cadastro = tk.Toplevel()
     janela_cadastro.title("Cadastrar Venda")
     janela_cadastro.geometry("400x400")
@@ -106,26 +116,32 @@ def abrir_janela_cadastro_venda():
     # Configuração do título
     tk.Label(janela_cadastro, text="Cadastrar Venda", font=("Arial", 14)).pack(pady=10)
     
+    # Campo para ID da Venda
     tk.Label(janela_cadastro, text="ID da Venda:").pack()
     ID_vendas_entry = tk.Entry(janela_cadastro, width=30)
     ID_vendas_entry.pack(pady=5)
 
+    # Campo para Código do Produto
     tk.Label(janela_cadastro, text="Código do Produto:").pack()
     codproduto_entry = tk.Entry(janela_cadastro, width=30)
     codproduto_entry.pack(pady=5)
 
+    # Campo para Código do Funcionário
     tk.Label(janela_cadastro, text="Código do Funcionário:").pack()
     codfuncionario_entry = tk.Entry(janela_cadastro, width=30)
     codfuncionario_entry.pack(pady=5)
 
+    # Campo para Quantidade do Produto
     tk.Label(janela_cadastro, text="Quantidade do Produto:").pack()
     quantidade_produto_entry = tk.Entry(janela_cadastro, width=30)
     quantidade_produto_entry.pack(pady=5)
 
+    # Campo para Valor Unitário
     tk.Label(janela_cadastro, text="Valor Unitário:").pack()
     valor_unitario_entry = tk.Entry(janela_cadastro, width=30)
     valor_unitario_entry.pack(pady=5)
 
+    # Campo para Data da Venda
     tk.Label(janela_cadastro, text="Data da Venda (YYYY-MM-DD):").pack()
     data_venda_entry = tk.Entry(janela_cadastro, width=30)
     data_venda_entry.pack(pady=5)
@@ -162,11 +178,19 @@ def abrir_janela_cadastro_venda():
         elif not resultado_funcionario:
             messagebox.showwarning("Aviso", "Código do funcionário não encontrado!")
         else:
-            # Inserindo os dados no banco de dados
+            # Inserindo os dados na tabela de vendas
             comando_sql = f'''INSERT INTO vendas 
                             (ID_vendas, codproduto, codfuncionario, Quantidade_produto, Valor_unitário, Valor_total, Data_da_venda) 
                             VALUES ("{id_venda}", "{codproduto}", "{codfuncionario}", "{quantidade_produto}", "{valor_unitario}", "{valor_total}", "{data_venda}")'''
             cursor.execute(comando_sql)
+
+            # Atualizando a coluna Vendas_totais_funcionários na tabela funcionários
+            cursor.execute(f'''
+                UPDATE funcionários 
+                SET Vendas_totais_funcionários = Vendas_totais_funcionários + 1 
+                WHERE ID_funcionário = "{codfuncionario}"
+            ''')
+
             conexao_banco.commit()
             messagebox.showinfo("Sucesso", "Venda cadastrada com sucesso!")
             janela_cadastro.destroy()  # Fecha a janela de cadastro após salvar
@@ -174,16 +198,17 @@ def abrir_janela_cadastro_venda():
     tk.Button(janela_cadastro, text="Salvar", command=salvar_venda).pack(pady=20)
 
 
-def abrir_janela_excluir_venda():
-    janela_abrir_janela_excluir_vendas = tk.Toplevel(janela_menu)
-    janela_abrir_janela_excluir_vendas.title("Excluir Venda")
-    janela_abrir_janela_excluir_vendas.geometry("400x400")
+def excluir_venda():
+    janela_excluir_vendas = tk.Toplevel(janela_menu)
+    janela_excluir_vendas.title("Excluir Venda")
+    janela_excluir_vendas.geometry("400x400")
 
     # Configuração do título
-    tk.Label(janela_abrir_janela_excluir_vendas, text="Excluir Venda", font=("Arial", 14)).pack(pady=10)
+    tk.Label(janela_excluir_vendas, text="Excluir Venda", font=("Arial", 14)).pack(pady=10)
 
-    tk.Label(janela_abrir_janela_excluir_vendas, text="ID da Venda:").pack()
-    ID_venda_entry = tk.Entry(janela_abrir_janela_excluir_vendas, width=30)
+    # Campo para o ID da venda
+    tk.Label(janela_excluir_vendas, text="ID da Venda:").pack()
+    ID_venda_entry = tk.Entry(janela_excluir_vendas, width=30)
     ID_venda_entry.pack(pady=5)
 
     # Função para apagar a venda no banco de dados
@@ -200,42 +225,43 @@ def abrir_janela_excluir_venda():
             cursor.execute(comando_sql)
             conexao_banco.commit()
             messagebox.showinfo("Sucesso", "Venda excluída com sucesso!")
-            janela_abrir_janela_excluir_vendas.destroy()  # Fecha a janela de excluir após salvar
+            janela_excluir_vendas.destroy()  # Fecha a janela de excluir após salvar
             
         else:
             messagebox.showwarning("Aviso", "Este ID não existe!")
 
-    tk.Button(janela_abrir_janela_excluir_vendas, text="Excluir", command=apagar_venda).pack(pady=20)
+    # Botão para excluir a venda
+    tk.Button(janela_excluir_vendas, text="Excluir", command=apagar_venda).pack(pady=20)
 
-def abrir_janela_alterar_venda():
-    janela_abrir_janela_alterar_venda = tk.Toplevel(janela_menu)
-    janela_abrir_janela_alterar_venda.title("Alterar Venda")
-    janela_abrir_janela_alterar_venda.geometry("400x600")
+def alterar_venda():
+    janela_alterar_venda = tk.Toplevel(janela_menu)
+    janela_alterar_venda.title("Alterar Venda")
+    janela_alterar_venda.geometry("400x600")
 
     # Título da janela
-    tk.Label(janela_abrir_janela_alterar_venda, text="Alterar Venda", font=("Arial", 14)).pack(pady=10)
+    tk.Label(janela_alterar_venda, text="Alterar Venda", font=("Arial", 14)).pack(pady=10)
 
     # Opção para buscar por ID
-    tk.Label(janela_abrir_janela_alterar_venda, text="Pesquisar por ID da Venda:").pack(pady=5)
-    busca_entry_venda = tk.Entry(janela_abrir_janela_alterar_venda, width=30)
+    tk.Label(janela_alterar_venda, text="Pesquisar por ID da Venda:").pack(pady=5)
+    busca_entry_venda = tk.Entry(janela_alterar_venda, width=30)
     busca_entry_venda.pack(pady=5)
 
     # Opção de campo a alterar
-    tk.Label(janela_abrir_janela_alterar_venda, text="Escolha o campo a alterar:").pack(pady=10)
+    tk.Label(janela_alterar_venda, text="Escolha o campo a alterar:").pack(pady=10)
     campo_var_venda = tk.StringVar(value="Quantidade_produto")
-    tk.Radiobutton(janela_abrir_janela_alterar_venda, text="Quantidade", variable=campo_var_venda, value="Quantidade_produto").pack()
-    tk.Radiobutton(janela_abrir_janela_alterar_venda, text="Valor Unitário", variable=campo_var_venda, value="Valor_unitário").pack()
-    tk.Radiobutton(janela_abrir_janela_alterar_venda, text="ID Venda", variable=campo_var_venda, value="ID_vendas").pack()
-    tk.Radiobutton(janela_abrir_janela_alterar_venda, text="Código Produto", variable=campo_var_venda, value="codproduto").pack()
-    tk.Radiobutton(janela_abrir_janela_alterar_venda, text="Código Funcionário", variable=campo_var_venda, value="codfuncionario").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Quantidade", variable=campo_var_venda, value="Quantidade_produto").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Valor Unitário", variable=campo_var_venda, value="Valor_unitário").pack()
+    tk.Radiobutton(janela_alterar_venda, text="ID Venda", variable=campo_var_venda, value="ID_vendas").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Código Produto", variable=campo_var_venda, value="codproduto").pack()
+    tk.Radiobutton(janela_alterar_venda, text="Código Funcionário", variable=campo_var_venda, value="codfuncionario").pack()
 
     # Entrada para o novo valor
-    tk.Label(janela_abrir_janela_alterar_venda, text="Novo valor:").pack(pady=5)
-    novo_valor_entry = tk.Entry(janela_abrir_janela_alterar_venda, width=30)
+    tk.Label(janela_alterar_venda, text="Novo valor:").pack(pady=5)
+    novo_valor_entry = tk.Entry(janela_alterar_venda, width=30)
     novo_valor_entry.pack(pady=5)
 
     # Função para buscar e alterar a venda
-    def buscar_e_abrir_janela_alterar_venda():
+    def buscar_e_alterar_venda():
         busca_valor_venda = busca_entry_venda.get()
         campo_venda = campo_var_venda.get()
         novo_valor_venda = novo_valor_entry.get()
@@ -246,6 +272,9 @@ def abrir_janela_alterar_venda():
 
         # Verificação se a venda existe
         if venda:
+            # Armazena o codfuncionario antigo
+            codfuncionario_antigo = venda[2]  # Supondo que o codfuncionario está na posição 5
+
             # Atualiza o campo correspondente
             if campo_venda == "Quantidade_produto":
                 nova_quantidade = float(novo_valor_venda)  # Converte para float
@@ -266,17 +295,41 @@ def abrir_janela_alterar_venda():
             elif campo_venda == "ID_vendas":
                 novo_id_venda = novo_valor_venda
                 
+                # Verifica se o novo ID já existe
+                cursor.execute(f'SELECT * FROM vendas WHERE ID_vendas = "{novo_id_venda}"')
+                if cursor.fetchone():
+                    messagebox.showwarning("Aviso", "Este ID da venda já está cadastrado!")
+                    return
+                
                 # Atualiza no banco de dados
                 comando_sql_venda = f'UPDATE vendas SET ID_vendas = "{novo_id_venda}" WHERE ID_vendas = "{venda[0]}"'
             
             elif campo_venda == "codproduto":
                 novo_cod_produto = novo_valor_venda
                 
+                # Verifica se o código do produto existe na tabela estoque
+                cursor.execute(f'SELECT * FROM estoque WHERE ID_produto = "{novo_cod_produto}"')
+                if not cursor.fetchone():
+                    messagebox.showwarning("Aviso", "Código do produto não encontrado na tabela estoque!")
+                    return
+                
                 # Atualiza no banco de dados
                 comando_sql_venda = f'UPDATE vendas SET codproduto = "{novo_cod_produto}" WHERE ID_vendas = "{venda[0]}"'
             
             elif campo_venda == "codfuncionario":
                 novo_cod_funcionario = novo_valor_venda
+                
+                # Verifica se o novo codfuncionario existe na tabela funcionários
+                cursor.execute(f'SELECT * FROM funcionários WHERE ID_funcionário = "{novo_cod_funcionario}"')
+                if not cursor.fetchone():
+                    messagebox.showwarning("Aviso", "Código do funcionário não encontrado na tabela funcionários!")
+                    return
+                
+                # Atualiza o total de vendas do funcionário antigo
+                cursor.execute(f'UPDATE funcionários SET Vendas_totais_funcionários = Vendas_totais_funcionários - 1 where ID_funcionário = "{codfuncionario_antigo}"')
+                
+                # Atualiza o total de vendas do novo funcionário
+                cursor.execute(f'UPDATE funcionários SET Vendas_totais_funcionários = Vendas_totais_funcionários + 1 WHERE ID_funcionário = "{novo_cod_funcionario}"')
                 
                 # Atualiza no banco de dados
                 comando_sql_venda = f'UPDATE vendas SET codfuncionario = "{novo_cod_funcionario}" WHERE ID_vendas = "{venda[0]}"'
@@ -285,13 +338,14 @@ def abrir_janela_alterar_venda():
             cursor.execute(comando_sql_venda)
             conexao_banco.commit()
             messagebox.showinfo("Sucesso", f"{campo_venda} atualizado com sucesso!")
-            janela_abrir_janela_alterar_venda.destroy()
+            janela_alterar_venda.destroy()
         else:
             messagebox.showwarning("Aviso", "Venda não encontrada!")
 
-    tk.Button(janela_abrir_janela_alterar_venda, text="Alterar", command=buscar_e_abrir_janela_alterar_venda).pack(pady=20)
+    # Botão para realizar a alteração
+    tk.Button(janela_alterar_venda, text="Alterar", command=buscar_e_alterar_venda).pack(pady=20)
     
-def abrir_janela_pesquisar_venda():
+def pesquisar_venda():
     janela_pesquisa = tk.Toplevel(janela_menu)
     janela_pesquisa.title("Pesquisar Vendas")
     janela_pesquisa.geometry("800x700")
@@ -354,47 +408,48 @@ def abrir_janela_pesquisar_venda():
         else:
             lista_resultados.insert(tk.END, "Nenhum resultado encontrado.")
 
+    # Botão para realizar a busca
     tk.Button(janela_pesquisa, text="Buscar", command=buscar).pack(pady=10)
     
 
     
 
-def abrir_janela_cadastro_estoque():
+def abrir_cadastro_estoque():
     # Função para abrir a janela de cadastro de estoque
     pass
 
-def abrir_janela_excluir_estoque():
+def excluir_estoque():
     # Função para excluir estoque
     pass
 
-def abrir_janela_alterar_estoque():
+def alterar_estoque():
     # Função para alterar estoque
     pass
 
-def abrir_janela_pesquisar_estoque():
+def pesquisar_estoque():
     # Função para pesquisar estoque
     pass
 
-def abrir_janela_estoque():
+def janela_estoque():
     janela = tk.Toplevel(janela_menu)
     janela.title("Estoque")
     janela.geometry("300x300")
     
     tk.Label(janela, text="Gestão de Estoque", font=("Arial", 14)).pack(pady=10)
 
-    tk.Button(janela, text="Cadastrar Estoque", width=20, command=abrir_janela_cadastro_estoque).pack(pady=5)
-    tk.Button(janela, text="Excluir Estoque", width=20, command=abrir_janela_excluir_estoque).pack(pady=5)
-    tk.Button(janela, text="Alterar Estoque", width=20, command=abrir_janela_alterar_estoque).pack(pady=5)
-    tk.Button(janela, text="Pesquisar Estoque", width=20, command=abrir_janela_pesquisar_estoque).pack(pady=5)
+    tk.Button(janela, text="Cadastrar Estoque", width=20, command=abrir_cadastro_estoque).pack(pady=5)
+    tk.Button(janela, text="Excluir Estoque", width=20, command=excluir_estoque).pack(pady=5)
+    tk.Button(janela, text="Alterar Estoque", width=20, command=alterar_estoque).pack(pady=5)
+    tk.Button(janela, text="Pesquisar Estoque", width=20, command=pesquisar_estoque).pack(pady=5)
 
-def abrir_janela_financeiro():
+def janela_financeiro():
     janela = tk.Toplevel(janela_menu)
     janela.title("Financeiro")
     janela.geometry("300x300")
     tk.Label(janela, text="Página de Financeiro").pack()
 
 # Funções para as outras operações de Funcionários (placeholders)
-def abrir_janela_excluir_funcionario():
+def excluir_funcionario():
     janela_excluir = tk.Toplevel(janela_menu)
     janela_excluir.title("Excluir Funcionário")
     janela_excluir.geometry("400x400")
@@ -402,6 +457,7 @@ def abrir_janela_excluir_funcionario():
     # Configuração do título
     tk.Label(janela_excluir, text="Excluir Funcionário", font=("Arial", 14)).pack(pady=10)
     
+    # Campo para o ID
     tk.Label(janela_excluir, text="ID:").pack()
     ID_entry = tk.Entry(janela_excluir, width=30)
     ID_entry.pack(pady=5)
@@ -427,7 +483,7 @@ def abrir_janela_excluir_funcionario():
 
     tk.Button(janela_excluir, text="Excluir", command=apagar_funcionario).pack(pady=20)
 
-def abrir_janela_alterar_funcionario():
+def alterar_funcionario():
     janela_alterar = tk.Toplevel(janela_menu)
     janela_alterar.title("Alterar Funcionário")
     janela_alterar.geometry("400x500")
@@ -492,9 +548,10 @@ def abrir_janela_alterar_funcionario():
         else:
             messagebox.showwarning("Aviso", "Funcionário não encontrado!")
 
+    # Botão para realizar a alteração
     tk.Button(janela_alterar, text="Alterar", command=buscar_e_alterar).pack(pady=20)
 
-def abrir_janela_pesquisar_funcionario():
+def pesquisar_funcionario():
     janela_pesquisa = tk.Toplevel(janela_menu)
     janela_pesquisa.title("Pesquisar Funcionário")
     janela_pesquisa.geometry("600x700")
@@ -557,6 +614,7 @@ def abrir_janela_pesquisar_funcionario():
         else:
             lista_resultados.insert(tk.END, "Nenhum resultado encontrado.")
 
+    # Botão para realizar a busca
     tk.Button(janela_pesquisa, text="Buscar", command=buscar).pack(pady=10)
 
 # Configuração da janela principal
@@ -573,10 +631,10 @@ texto_inicial = tk.Label(frame_central, text='Selecione a opção desejada:', fo
 texto_inicial.pack(pady=20)
 
 # Botões centralizados e maiores
-tk.Button(frame_central, text='Funcionários', font=("Arial", 18), width=20, height=2, command=abrir_janela_funcionarios).pack(pady=10)
-tk.Button(frame_central, text='Vendas', font=("Arial", 18), width=20, height=2, command=abrir_janela_vendas).pack(pady=10)
-tk.Button(frame_central, text='Estoque', font=("Arial", 18), width=20, height=2, command=abrir_janela_estoque).pack(pady=10)
-tk.Button(frame_central, text='Financeiro', font=("Arial", 18), width=20, height=2, command=abrir_janela_financeiro).pack(pady=10)
+tk.Button(frame_central, text='Funcionários', font=("Arial", 18), width=20, height=2, command=janela_funcionarios).pack(pady=10)
+tk.Button(frame_central, text='Vendas', font=("Arial", 18), width=20, height=2, command=janela_vendas).pack(pady=10)
+tk.Button(frame_central, text='Estoque', font=("Arial", 18), width=20, height=2, command=janela_estoque).pack(pady=10)
+tk.Button(frame_central, text='Financeiro', font=("Arial", 18), width=20, height=2, command=janela_financeiro).pack(pady=10)
 
 # Loop da janela principal
 janela_menu.mainloop()
