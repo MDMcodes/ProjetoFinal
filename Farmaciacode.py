@@ -367,6 +367,11 @@ def cadastrar_venda():
                 SET Vendas_totais_funcionários = Vendas_totais_funcionários + 1 
                 WHERE ID_funcionário = "{codfuncionario}"
             ''')
+            cursor.execute(f'''
+                UPDATE estoque
+                SET Quantidade_estoque = Quantidade_estoque - {quantidade_produto}
+                WHERE ID_produto = "{codproduto}"
+            ''')
 
             conexao_banco.commit()
             messagebox.showinfo("Sucesso", "Venda cadastrada com sucesso!")
